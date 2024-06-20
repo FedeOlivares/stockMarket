@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}ls
+    Index
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped" style="max-width:70%;margin:auto">
+        <thead>
+            <tr>
+                <th class="text-start">Symbol</th>
+                <th class="text-start">Shares</th>
+                <th class="text-start">Invested</th>
+                <th class="text-start">Current price</th>
+                <th class="text-end">Proffit/Loss</th>
+                <th class="text-end">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td class="text-start">{{ stock.symbol }}</td>
+                <td class="text-start">{{ stock.quantity }}</td>
+                <td class="text-start">{{ stock.total_cost|usd }}</td>
+                <td class="text-start">{{ (owned_price[stock.symbol])|usd }}</td>
+                {% set current_balance = ((owned_price[stock.symbol] * stock.quantity) - stock.total_cost) %}
+                {% if current_balance > 0 %}
+                <td class="text-end" style="color: green">{{ current_balance|usd }}</td>
+                {% elif current_balance < 0 %}
+                <td class="text-end" style="color: red">{{ current_balance|usd }}</td>
+                {% else %}
+                <td class="text-end">{{ current_balance|usd }}</td>
+                {% endif %}
+                <td class="text-end">{{ (stock.quantity * owned_price[stock.symbol])|usd }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="5">Cash</td>
+                <td class="border-0 text-end"> {{ user_cash|usd}} </td>
+            </tr>
+            {% if total_assets is defined %}
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="5">TOTAL</td>
+                <td class="border-0 w-bold text-end"> {{ total_assets|usd }} </td>
+            </tr>
+            {% endif %}
+        </tfoot>
+    </table>
+{% endblock %}
