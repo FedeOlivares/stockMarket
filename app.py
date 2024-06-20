@@ -1,5 +1,4 @@
 import os
-
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from datetime import datetime
@@ -183,8 +182,8 @@ def quote():
 
         if lookedup is not None:
             price = usd(lookedup["price"])
-            name = lookedup["name"]
-            return render_template("quote.html", price=price, name=name, symbol=symbol)
+            symbol = lookedup["symbol"]
+            return render_template("quote.html", price=price, symbol=symbol)
         else:
             # return render_template("quote.html")
             return apology("Invalid symbol", 400)
